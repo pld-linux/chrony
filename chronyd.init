@@ -129,7 +129,11 @@ case "$1" in
   force-reload)
 	condrestart 7
 	;;
-  online|offline|cyclelogs) 
+  cyclelogs|flush-logs) 
+   	status chronyd >/dev/null 2>&1 || exit 7
+	chrony_command cyclelogs
+	;;
+  online|offline) 
    	status chronyd >/dev/null 2>&1 || exit 7
 	chrony_command $1
 	;;
