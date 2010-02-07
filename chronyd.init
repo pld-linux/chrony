@@ -147,6 +147,9 @@ case "$1" in
   status)
 	status chronyd
 	RETVAL=$?
+	if [ $RETVAL = 0 ]; then
+		chrony_command sources
+	fi
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|try-restart|force-reload|online|offline|cyclelogs|command|status}"
