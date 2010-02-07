@@ -52,7 +52,7 @@ $1
 EOF
         chronycpid=$!
 
-        # chronyc will hang if the daemon doesn't respond, kill it after 3 s 
+        # chronyc will hang if the daemon doesn't respond, kill it after 3 s
         (sleep 3; kill $chronycpid) < /dev/null > /dev/null 2>&1 &
         killerpid=$!
 
@@ -129,11 +129,11 @@ case "$1" in
   force-reload)
 	condrestart 7
 	;;
-  cyclelogs|flush-logs) 
+  cyclelogs|flush-logs)
    	status chronyd >/dev/null 2>&1 || exit 7
 	chrony_command cyclelogs
 	;;
-  online|offline) 
+  online|offline)
    	status chronyd >/dev/null 2>&1 || exit 7
 	chrony_command $1
 	;;
