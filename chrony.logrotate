@@ -1,0 +1,8 @@
+/var/log/chrony/*.log {
+    missingok
+    nocreate
+    sharedscripts
+    postrotate
+        /sbin/service chronyd cyclelogs > /dev/null
+    endscript
+}

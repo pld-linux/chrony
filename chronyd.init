@@ -1,0 +1,151 @@
+#!/bin/sh
+#
+# chronyd	chronyd short service description
+#
+# chkconfig:   2345 58 74
+# description: Client/server for the Network Time Protocol, \
+#              this program keeps your computer's clock accurate.
+#
+# $Id$
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/chronyd ] && . /etc/sysconfig/chronyd
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "Chronyd NTPD"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+config=/etc/ntp/chrony.conf
+keyfile=/etc/ntp/keys
+chronyc=/usr/bin/chronyc
+
+get_key() {
+    awk '/^[ \t]*'$1'\>/ { print $2; exit }' < $keyfile
+}
+
+get_commandkeyid() {
+    awk '/^[ \t]*commandkey\>/ { keyid=$2 } END { print keyid }' < $config
+}
+
+chrony_command() {
+    commandkeyid=$(get_commandkeyid)
+    [ -z "$commandkeyid" ] && return 1
+    commandkey=$(get_key $commandkeyid)
+    [ -z "$commandkey" ] && return 2
+
+    ! (
+        $chronyc <<EOF &
+password $commandkey
+$1
+EOF
+        chronycpid=$!
+
+        # chronyc will hang if the daemon doesn't respond, kill it after 3 s 
+        (sleep 3; kill $chronycpid) < /dev/null &> /dev/null &
+        killerpid=$!
+
+        wait $chronycpid &> /dev/null
+        kill $killerpid &> /dev/null || echo "chronyd not responding"
+    ) | grep -v '200 OK'
+}
+
+generate_commandkey() {
+    commandkeyid=$(get_commandkeyid)
+    [ -z "$commandkeyid" ] && return 1
+    commandkey=$(get_key $commandkeyid)
+    [ -z "$commandkey" ] || return 0
+
+    echo -n $"Generating chrony command key: "
+    commandkey=$(tr -c -d '[\041-\176]' < /dev/urandom | head -c 8)
+    [ -n "$commandkey" ] && echo "$commandkeyid $commandkey" >> $keyfile &&
+        success || failure
+    echo
+}
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/chronyd ]; then
+		msg_already_running "Chronyd NTPD"
+		return
+	fi
+
+    generate_commandkey
+
+	msg_starting "Chronyd NTPD"
+	daemon /usr/sbin/chronyd $OPTIONS
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/chronyd
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/chronyd ]; then
+		msg_not_running "Chronyd NTPD"
+		return
+	fi
+
+	# Stop daemons.
+	msg_stopping "Chronyd NTPD"
+	killproc chronyd
+	rm -f /var/lock/subsys/chronyd
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/chronyd ]; then
+		msg_not_running "Chronyd NTPD"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
+	;;
+  online|offline|cyclelogs) 
+   	status chronyd >/dev/null 2>&1 || exit 7
+	chrony_command $1
+	;;
+  command)
+   	status chronyd >/dev/null 2>&1 || exit 7
+	chrony_command "$2"
+	;;
+  status)
+	status chronyd
+	RETVAL=$?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload||online|offline|cyclelogs|command|status}"
+	exit 3
+esac
+
+exit $RETVAL
