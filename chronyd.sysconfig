@@ -1,1 +1,6 @@
-OPTIONS="-u ntp"
+# Set nice level for chronyd
+
+# Define services nice level
+SERVICE_RUN_NICE_LEVEL="+1"
+
+NTPD_USER="ntp"

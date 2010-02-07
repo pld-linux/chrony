@@ -14,6 +14,9 @@
 # Get network config
 . /etc/sysconfig/network
 
+# default user if not overriden by config
+NTPD_USER="ntp"
+
 # Get service config - may override defaults
 [ -f /etc/sysconfig/chronyd ] && . /etc/sysconfig/chronyd
 
@@ -82,7 +85,7 @@ start() {
     generate_commandkey
 
 	msg_starting "Chronyd NTPD"
-	daemon /usr/sbin/chronyd $OPTIONS
+	daemon /usr/sbin/chronyd -u $NTPD_USER $OPTIONS
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/chronyd
 }
