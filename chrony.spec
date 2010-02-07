@@ -1,14 +1,12 @@
-%define		subver	pre1
-%define		rel 	1
 Summary:	An NTP client/server
 Name:		chrony
 Version:	1.24
-Release:	0.%{subver}.%{rel}
+Release:	1
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
-Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}-%{subver}.tar.gz
-# Source0-md5:	e1f0d15bc0830f5f6bf80da2d72eb16a
+Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
+# Source0-md5:	8849e95428f43c5ab2692a2812653e65
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
@@ -40,7 +38,9 @@ systems with dial-up Internet connections, and also supports computers
 in permanently connected environments.
 
 %prep
-%setup -q -n %{name}-%{version}-%{subver}
+%setup -q
+
+%{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi
 
 %build
 # NOTE: It is not autoconf generated configre
