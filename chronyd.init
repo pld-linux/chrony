@@ -67,11 +67,9 @@ generate_commandkey() {
     commandkey=$(get_key $commandkeyid)
     [ -z "$commandkey" ] || return 0
 
-    echo -n $"Generating chrony command key: "
+	show "Generating Chrony command key"; busy
     commandkey=$(tr -c -d '[\041-\176]' < /dev/urandom | head -c 8)
-    [ -n "$commandkey" ] && echo "$commandkeyid $commandkey" >> $keyfile &&
-        success || failure
-    echo
+    [ -n "$commandkey" ] && echo "$commandkeyid $commandkey" >> $keyfile && ok || fail
 }
 
 start() {
