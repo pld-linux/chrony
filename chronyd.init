@@ -32,11 +32,11 @@ keyfile=/etc/ntp/keys
 chronyc=/usr/bin/chronyc
 
 get_key() {
-    awk '/^[ \t]*'$1'\>/ { print $2; exit }' < $keyfile
+    awk '/^[ \t]*'$1'[ \t]*/ { print $2; exit }' < $keyfile
 }
 
 get_commandkeyid() {
-    awk '/^[ \t]*commandkey\>/ { keyid=$2 } END { print keyid }' < $config
+    awk '/^[ \t]*commandkey[ \t]*/ { keyid=$2 } END { print keyid }' < $config
 }
 
 chrony_command() {
@@ -144,7 +144,7 @@ case "$1" in
 	RETVAL=$?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|force-reload||online|offline|cyclelogs|command|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|online|offline|cyclelogs|command|status}"
 	exit 3
 esac
 
