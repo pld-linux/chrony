@@ -67,7 +67,7 @@ install -d $RPM_BUILD_ROOT/etc/{sysconfig,logrotate.d,rc.d/init.d} \
 rm -rf $RPM_BUILD_ROOT%{_docdir}
 
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/chrony.conf
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/chrony.keys
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/keys
 cp -a %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/chronyd
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/chrony
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/chronyd
@@ -104,7 +104,7 @@ fi
 %doc NEWS README chrony.txt faq.txt examples/*
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.conf
-%attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.keys
+%attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keys
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/chronyd
 %config(noreplace) /etc/logrotate.d/chrony
 %attr(754,root,root) /etc/rc.d/init.d/chronyd
