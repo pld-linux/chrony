@@ -1,0 +1,22 @@
+description "NTP daemon"
+
+start on pld.network-started
+stop on pld.shutdown-started
+
+env NTPD_USER="ntp"
+env NTPD_OPTIONS=""
+
+respawn
+
+pre-start script
+	# do not bother to start if not configured
+	[ -f /etc/ntp/chrony.conf ] || /sbin/initctl stop
+end script
+
+script
+	# Source old-style ntp service configuration
+	[ -f /etc/sysconfig/chronyd ] && . /etc/sysconfig/chronyd
+
+	export USE_UPSTART=no
+	exec /etc/rc.d/init.d/chronyd start
+end script
