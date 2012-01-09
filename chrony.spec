@@ -1,7 +1,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	1.26
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
@@ -110,6 +110,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/chronyd
 %config(noreplace) %verify(not md5 mtime size) /etc/init/chronyd.conf
 %config(noreplace) /etc/logrotate.d/chrony
+%attr(754,root,root) /etc/rc.d/init.d/chronyd
 %attr(755,root,root) %{_bindir}/chronyc
 %attr(755,root,root) %{_sbindir}/chronyd
 %{_mandir}/man1/chrony.1*
