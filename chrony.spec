@@ -1,7 +1,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	1.26
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
