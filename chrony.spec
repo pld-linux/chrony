@@ -52,7 +52,6 @@ CPPFLAGS="%{rpmcppflags}" \
 	--prefix=%{_prefix} \
 	--sysconfdir=%{_sysconfdir} \
 	--docdir=%{_docdir} \
-	--with-readline \
 	--without-editline \
 
 %{__make} getdate all docs
