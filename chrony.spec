@@ -16,7 +16,7 @@ Source6:	%{name}d.upstart
 BuildRequires:	bison
 BuildRequires:	libcap-devel
 BuildRequires:	readline-devel
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	texinfo
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -32,6 +32,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/ntp
 
+# assume gcc 3.4 has it
+%if "%{cc_version}" >= "3.4"
+%define		specflags	-pie -fpie
+%endif
+
 %description
 A client/server for the Network Time Protocol, this program keeps your
 computer's clock accurate. It was specially designed to support
@@ -46,7 +51,7 @@ in permanently connected environments.
 %build
 # NOTE: It is not autoconf generated configre
 CC="%{__cc}" \
-CFLAGS="%{rpmcflags} -pie -fpie -Wmissing-prototypes -Wall" \
+CFLAGS="%{rpmcflags} -Wmissing-prototypes -Wall" \
 CPPFLAGS="%{rpmcppflags}" \
 ./configure \
 	--prefix=%{_prefix} \
