@@ -1,7 +1,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	1.26
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
@@ -27,6 +27,7 @@ Requires(pre):	/usr/sbin/useradd
 Provides:	group(ntp)
 Provides:	ntpdaemon
 Provides:	user(ntp)
+Conflicts:	logrotate < 3.8.0
 Obsoletes:	ntpdaemon
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
