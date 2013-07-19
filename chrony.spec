@@ -1,12 +1,12 @@
 Summary:	An NTP client/server
 Name:		chrony
-Version:	1.27
+Version:	1.28
 Release:	1
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	0c2ae73f7e8ddfe31eeafc803818b9e4
+# Source0-md5:	d11dd205cd8837ae49f065e42a84f363
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
@@ -48,7 +48,7 @@ in permanently connected environments.
 %prep
 %setup -q
 
-%{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi
+%{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi.in
 
 %build
 # NOTE: It is not autoconf generated configre
