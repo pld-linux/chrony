@@ -1,12 +1,12 @@
 Summary:	An NTP client/server
 Name:		chrony
-Version:	1.29.1
+Version:	1.31
 Release:	1
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	9d49eadac5eb49daec8cc3d92a869b0c
+# Source0-md5:	04ab702fc81150db06809562a9aaed92
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
@@ -109,7 +109,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS README chrony.txt faq.txt examples/*
+%doc NEWS README chrony.txt FAQ examples/*
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.conf
 %attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keys
