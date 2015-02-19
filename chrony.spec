@@ -1,7 +1,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	1.31
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
@@ -13,6 +13,7 @@ Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Source6:	%{name}d.upstart
+Patch0:		chrony-sysheaders.patch
 BuildRequires:	bison
 BuildRequires:	libcap-devel
 BuildRequires:	nss-devel
@@ -47,6 +48,7 @@ in permanently connected environments.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi.in
 
