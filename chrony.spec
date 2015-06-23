@@ -1,19 +1,18 @@
 Summary:	An NTP client/server
 Name:		chrony
-Version:	1.31.1
+Version:	2.1
 Release:	1
 License:	GPL v2
 Group:		Daemons
 URL:		http://chrony.tuxfamily.org/
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	01e54c63d09a310f30c4e399f18499df
+# Source0-md5:	7ea7177fd784527d70ed929c862bba8f
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Source6:	%{name}d.upstart
-Patch0:		chrony-sysheaders.patch
 BuildRequires:	bison
 BuildRequires:	libcap-devel
 BuildRequires:	nss-devel
@@ -48,7 +47,6 @@ in permanently connected environments.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi.in
 
@@ -121,7 +119,6 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/chronyd
 %attr(755,root,root) %{_bindir}/chronyc
 %attr(755,root,root) %{_sbindir}/chronyd
-%{_mandir}/man1/chrony.1*
 %{_mandir}/man1/chronyc.1*
 %{_mandir}/man5/chrony.conf.5*
 %{_mandir}/man8/chronyd.8*
