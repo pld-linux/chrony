@@ -4,7 +4,6 @@ Version:	2.1
 Release:	1
 License:	GPL v2
 Group:		Daemons
-URL:		http://chrony.tuxfamily.org/
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
 # Source0-md5:	7ea7177fd784527d70ed929c862bba8f
 Source1:	%{name}.conf
@@ -13,6 +12,7 @@ Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Source6:	%{name}d.upstart
+URL:		http://chrony.tuxfamily.org/
 BuildRequires:	bison
 BuildRequires:	libcap-devel
 BuildRequires:	nss-devel
@@ -28,8 +28,8 @@ Requires(pre):	/usr/sbin/useradd
 Provides:	group(ntp)
 Provides:	ntpdaemon
 Provides:	user(ntp)
-Conflicts:	logrotate < 3.8.0
 Obsoletes:	ntpdaemon
+Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/ntp
