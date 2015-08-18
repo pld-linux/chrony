@@ -1,7 +1,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	2.1.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -11,7 +11,6 @@ Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
-Source6:	%{name}d.upstart
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	bison
 BuildRequires:	libcap-devel
@@ -65,7 +64,7 @@ CPPFLAGS="%{rpmcppflags}" \
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{sysconfig,logrotate.d,rc.d/init.d,init} \
+install -d $RPM_BUILD_ROOT/etc/{sysconfig,logrotate.d,rc.d/init.d} \
 	$RPM_BUILD_ROOT{%{_sysconfdir},/var/{lib/ntp,log/chrony}}
 
 %{__make} install install-docs \
@@ -78,7 +77,6 @@ cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/keys
 cp -a %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/chronyd
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/chrony
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/chronyd
-cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/init/chronyd.conf
 
 touch $RPM_BUILD_ROOT%{_localstatedir}/lib/ntp/{drift,rtc}
 
@@ -114,7 +112,6 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.conf
 %attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keys
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/chronyd
-%config(noreplace) %verify(not md5 mtime size) /etc/init/chronyd.conf
 %config(noreplace) /etc/logrotate.d/chrony
 %attr(754,root,root) /etc/rc.d/init.d/chronyd
 %attr(755,root,root) %{_bindir}/chronyc
