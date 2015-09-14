@@ -6,7 +6,6 @@
 # description: Client/server for the Network Time Protocol, \
 #              this program keeps your computer's clock accurate.
 #
-# $Id$
 
 # Source function library
 . /etc/rc.d/init.d/functions
@@ -56,11 +55,12 @@ EOF
         chronycpid=$!
 
         # chronyc will hang if the daemon doesn't respond, kill it after 3 s
+		#'
         (sleep 3; kill $chronycpid) < /dev/null > /dev/null 2>&1 &
         killerpid=$!
 
-        wait $chronycpid &> /dev/null
-        kill $killerpid &> /dev/null || echo "chronyd not responding"
+        wait $chronycpid >/dev/null 2>&1
+        kill $killerpid >/dev/null 2>&1 || echo "chronyd not responding"
     ) | grep -v '200 OK'
 }
 
