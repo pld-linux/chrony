@@ -1,23 +1,23 @@
 Summary:	An NTP client/server
 Name:		chrony
-Version:	2.2.1
+Version:	2.4
 Release:	1
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	ce46990540aab3670d093311ee43fe17
+# Source0-md5:	d0598aa8a9be8faccef9386f6fc0d5f2
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 URL:		http://chrony.tuxfamily.org/
+BuildRequires:	asciidoc
 BuildRequires:	bison
 BuildRequires:	libcap-devel
 BuildRequires:	nss-devel
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.453
-BuildRequires:	texinfo
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
@@ -47,8 +47,6 @@ in permanently connected environments.
 %prep
 %setup -q
 
-%{__sed} -i -e 's,/usr/local,%{_prefix},g' *.texi.in
-
 %build
 # NOTE: It is not autoconf generated configre
 CC="%{__cc}" \
@@ -60,7 +58,8 @@ CPPFLAGS="%{rpmcppflags}" \
 	--docdir=%{_docdir} \
 	--without-editline \
 
-%{__make} getdate all docs
+%{__make} getdate all docs \
+	ADOC=asciidoc
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -88,7 +87,6 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 246 -d %{_localstatedir}/lib/ntp -g ntp -c "NTP Daemon" ntp
 
 %post
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 /sbin/chkconfig --add chronyd
 %service chronyd restart
 
@@ -99,7 +97,6 @@ if [ "$1" = "0" ]; then
 fi
 
 %postun
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
 if [ "$1" = "0" ]; then
 	%userremove ntp
 	%groupremove ntp
@@ -107,7 +104,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS README chrony.txt FAQ examples/*
+%doc NEWS README FAQ examples/* doc/{faq,installation}.html
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.conf
 %attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keys
@@ -119,7 +116,6 @@ fi
 %{_mandir}/man1/chronyc.1*
 %{_mandir}/man5/chrony.conf.5*
 %{_mandir}/man8/chronyd.8*
-%{_infodir}/chrony.info*
 
 %dir %attr(770,root,ntp) /var/lib/ntp
 %attr(640,ntp,ntp) %ghost /var/lib/ntp/drift
