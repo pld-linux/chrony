@@ -1,7 +1,9 @@
+%define		nettle_ver	3.4
+
 Summary:	An NTP client/server
 Name:		chrony
 Version:	3.3
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -15,6 +17,7 @@ URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
 BuildRequires:	libcap-devel
+BuildRequires:	nettle-devel >= %{nettle_ver}
 BuildRequires:	nss-devel
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.453
@@ -27,6 +30,7 @@ Requires(pre):	/usr/sbin/useradd
 Provides:	group(ntp)
 Provides:	ntpdaemon
 Provides:	user(ntp)
+Requires:	nettle >= %{nettle_ver}
 Obsoletes:	ntpdaemon
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
