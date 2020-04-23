@@ -3,7 +3,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	3.5
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -13,10 +13,13 @@ Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
+Patch0:		allow-clock_adjtime.patch
+Patch1:		fix-seccomp-build.patch
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
 BuildRequires:	libcap-devel
+BuildRequires:	libseccomp-devel
 BuildRequires:	nettle-devel >= %{nettle_ver}
 BuildRequires:	nss-devel
 BuildRequires:	readline-devel
@@ -50,6 +53,8 @@ in permanently connected environments.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
@@ -57,10 +62,15 @@ CC="%{__cc}" \
 CFLAGS="%{rpmcflags} -Wmissing-prototypes -Wall" \
 CPPFLAGS="%{rpmcppflags}" \
 ./configure \
+	--enable-ntp-signd \
+	--enable-scfilter \
 	--prefix=%{_prefix} \
 	--sysconfdir=%{_sysconfdir} \
 	--docdir=%{_docdir} \
-	--without-editline \
+	--with-ntp-era=$(date -d '1970-01-01 00:00:00+00:00' +'%s') \
+	--with-hwclockfile=%{_sysconfdir}/adjtime \
+	--with-sendmail=%{_sbindir}/sendmail \
+	--without-editline
 
 %{__make} getdate all docs \
 	ADOC=asciidoc
