@@ -33,23 +33,9 @@ config=/etc/ntp/chrony.conf
 keyfile=/etc/ntp/keys
 chronyc=/usr/bin/chronyc
 
-get_key() {
-    awk '/^[ \t]*'$1'[ \t]*/ { print $2; exit }' < $keyfile
-}
-
-get_commandkeyid() {
-    awk '/^[ \t]*commandkey[ \t]*/ { keyid=$2 } END { print keyid }' < $config
-}
-
 chrony_command() {
-    commandkeyid=$(get_commandkeyid)
-    [ -z "$commandkeyid" ] && return 1
-    commandkey=$(get_key $commandkeyid)
-    [ -z "$commandkey" ] && return 2
-
     ! (
         $chronyc <<EOF &
-password $commandkey
 $1
 EOF
         chronycpid=$!
@@ -64,25 +50,12 @@ EOF
     ) | grep -v '200 OK'
 }
 
-generate_commandkey() {
-    commandkeyid=$(get_commandkeyid)
-    [ -z "$commandkeyid" ] && return 1
-    commandkey=$(get_key $commandkeyid)
-    [ -z "$commandkey" ] || return 0
-
-	show "Generating Chrony command key"; busy
-    commandkey=$(tr -c -d '[\041-\176]' < /dev/urandom | head -c 8)
-    [ -n "$commandkey" ] && echo "$commandkeyid $commandkey" >> $keyfile && ok || fail
-}
-
 start() {
 	# Check if the service is already running?
 	if [ -f /var/lock/subsys/chronyd ]; then
 		msg_already_running "Chronyd NTPD"
 		return
 	fi
-
-    generate_commandkey
 
 	msg_starting "Chronyd NTPD"
 	daemon /usr/sbin/chronyd -u $NTPD_USER $OPTIONS

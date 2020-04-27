@@ -3,7 +3,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	3.5
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -62,6 +62,7 @@ CC="%{__cc}" \
 CFLAGS="%{rpmcflags} -Wmissing-prototypes -Wall" \
 CPPFLAGS="%{rpmcppflags}" \
 ./configure \
+	--enable-debug \
 	--enable-ntp-signd \
 	--enable-scfilter \
 	--prefix=%{_prefix} \
