@@ -3,7 +3,7 @@
 Summary:	An NTP client/server
 Name:		chrony
 Version:	3.5
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -15,6 +15,7 @@ Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Patch0:		allow-clock_adjtime.patch
 Patch1:		fix-seccomp-build.patch
+Patch2:		dont-force-index.patch
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
@@ -55,6 +56,7 @@ in permanently connected environments.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
