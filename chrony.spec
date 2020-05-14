@@ -1,9 +1,11 @@
+# TODO: pps (BR: pps-tools-devel)
 %define		nettle_ver	3.4
 
 Summary:	An NTP client/server
+Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
 Version:	3.5
-Release:	5
+Release:	6
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -20,10 +22,11 @@ URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
 BuildRequires:	libcap-devel
+BuildRequires:	libedit-devel
 BuildRequires:	libseccomp-devel
+# for hashing; can be also nss 3.x or libtomcrypt
 BuildRequires:	nettle-devel >= %{nettle_ver}
-BuildRequires:	nss-devel
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.453
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -52,6 +55,12 @@ computer's clock accurate. It was specially designed to support
 systems with dial-up Internet connections, and also supports computers
 in permanently connected environments.
 
+%description -l pl.UTF-8
+Klient/serwer protokołu NTP (Network Time Protocol), pozwalający
+utrzymać zegar komputera dokładnym. Został zaprojektowany w
+szczególności do obsłużenia systemów z wdzwanianym połączeniem do
+Internetu, obsługuje także komputery na stałym łączu.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -72,8 +81,7 @@ CPPFLAGS="%{rpmcppflags}" \
 	--docdir=%{_docdir} \
 	--with-ntp-era=$(date -d '1970-01-01 00:00:00+00:00' +'%s') \
 	--with-hwclockfile=%{_sysconfdir}/adjtime \
-	--with-sendmail=%{_sbindir}/sendmail \
-	--without-editline
+	--with-sendmail=%{_sbindir}/sendmail
 
 %{__make} getdate all docs \
 	ADOC=asciidoc
@@ -86,7 +94,7 @@ install -d $RPM_BUILD_ROOT/etc/{sysconfig,logrotate.d,rc.d/init.d} \
 %{__make} install install-docs \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -rf $RPM_BUILD_ROOT%{_docdir}
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}
 
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/chrony.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/keys
