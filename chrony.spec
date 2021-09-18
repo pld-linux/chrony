@@ -4,20 +4,19 @@
 Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
-Version:	3.5
-Release:	6
+Version:	4.1
+Release:	1
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	5f66338bc940a9b51eede8f391e7bed3
+# Source0-md5:	7133880806887b629678c36a48217806
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
 Source4:	%{name}d.init
 Source5:	%{name}.logrotate
-Patch0:		allow-clock_adjtime.patch
-Patch1:		fix-seccomp-build.patch
-Patch2:		dont-force-index.patch
+Patch0:		fix-seccomp-build.patch
+Patch1:		chrony-seccomp.patch
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
@@ -65,7 +64,6 @@ Internetu, obsługuje także komputery na stałym łączu.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
