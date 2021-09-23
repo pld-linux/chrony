@@ -5,7 +5,7 @@ Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
 Version:	4.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
@@ -17,6 +17,7 @@ Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Patch0:		fix-seccomp-build.patch
 Patch1:		chrony-seccomp.patch
+Patch2:		conf.d.patch
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
@@ -64,6 +65,7 @@ Internetu, obsługuje także komputery na stałym łączu.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
@@ -87,7 +89,7 @@ CPPFLAGS="%{rpmcppflags}" \
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,logrotate.d,rc.d/init.d} \
-	$RPM_BUILD_ROOT{%{_sysconfdir},/var/{lib/ntp,log/chrony}}
+	$RPM_BUILD_ROOT{%{_sysconfdir}/chrony.d,/var/{lib/ntp,log/chrony}}
 
 %{__make} install install-docs \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -130,6 +132,7 @@ fi
 %doc NEWS README FAQ examples/* doc/{faq,installation}.html
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/chrony.conf
+%attr(750,root,root) %dir %{_sysconfdir}/chrony.d
 %attr(640,root,ntp) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/keys
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/chronyd
 %config(noreplace) /etc/logrotate.d/chrony
