@@ -1,15 +1,15 @@
 # TODO: pps (BR: pps-tools-devel)
-%define		nettle_ver	3.4
+%define		nettle_ver	3.9
 
 Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
-Version:	4.3
+Version:	4.4
 Release:	1
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	765dd8c085a0be2a52f9e9135665f0b7
+# Source0-md5:	f9876c57f9385c193c806ad8d5c6aec7
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
