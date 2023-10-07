@@ -1,4 +1,3 @@
-# TODO: pps (BR: pps-tools-devel)
 %define		nettle_ver	3.9
 
 Summary:	An NTP client/server
@@ -20,12 +19,14 @@ Patch1:		conf.d.patch
 URL:		http://chrony.tuxfamily.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
+BuildRequires:	gnutls-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libseccomp-devel
-# for hashing; can be also nss 3.x or libtomcrypt
+# for hashing; can be also nss 3.x, libtomcrypt, gnutls
 BuildRequires:	nettle-devel >= %{nettle_ver}
 BuildRequires:	pkgconfig
+BuildRequires:	pps-tools-devel
 BuildRequires:	rpmbuild(macros) >= 1.453
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
