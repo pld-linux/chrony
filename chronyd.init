@@ -40,13 +40,13 @@ $1
 EOF
         chronycpid=$!
 
-        # chronyc will hang if the daemon doesn't respond, kill it after 3 s
-		#'
+        # chronyc will hang if the daemon doesn't respond, kill it after 3s
         (sleep 3; kill $chronycpid) < /dev/null > /dev/null 2>&1 &
         killerpid=$!
 
         wait $chronycpid >/dev/null 2>&1
-        kill $killerpid >/dev/null 2>&1 || echo "chronyd not responding"
+        # kill also $killerpid children processes to avoid waiting for "sleep" to finish
+        kill $killerpid $(cat /proc/$killerpid/task/$killerpid/children) >/dev/null 2>&1 || echo "chronyd not responding"
     ) | grep -v '200 OK'
 }
 

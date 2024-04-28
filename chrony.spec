@@ -4,7 +4,7 @@ Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
 Version:	4.5
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Daemons
 Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
