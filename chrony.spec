@@ -3,12 +3,12 @@
 Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
-Version:	4.5
-Release:	2
+Version:	4.6.1
+Release:	1
 License:	GPL v2
 Group:		Daemons
-Source0:	http://download.tuxfamily.org/chrony/%{name}-%{version}.tar.gz
-# Source0-md5:	fa50d026df54f9919e6a37fae1258c61
+Source0:	https://chrony-project.org/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	81a83f54d5f8e1d5fd9afcf8a40c493d
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
@@ -16,7 +16,7 @@ Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Patch0:		fix-seccomp-build.patch
 Patch1:		conf.d.patch
-URL:		http://chrony.tuxfamily.org/
+URL:		https://chrony-project.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
 BuildRequires:	gnutls-devel
@@ -63,8 +63,8 @@ Internetu, obsługuje także komputery na stałym łączu.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
