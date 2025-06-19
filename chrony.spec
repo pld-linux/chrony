@@ -3,12 +3,12 @@
 Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
-Version:	4.6.1
+Version:	4.7
 Release:	1
 License:	GPL v2
 Group:		Daemons
 Source0:	https://chrony-project.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	81a83f54d5f8e1d5fd9afcf8a40c493d
+# Source0-md5:	a1ab6e972527a9cbf6bf862679352ed3
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
