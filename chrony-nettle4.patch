@@ -1,0 +1,52 @@
+--- chrony-4.8/cmac_nettle.c.orig	2026-05-21 22:25:14.426837855 +0200
++++ chrony-4.8/cmac_nettle.c	2026-05-21 22:26:57.756278071 +0200
+@@ -29,6 +29,7 @@
+ 
+ #include "sysincl.h"
+ 
++#include <nettle/version.h>
+ #include <nettle/cmac.h>
+ 
+ #include "cmac.h"
+@@ -95,11 +96,19 @@ CMC_Hash(CMC_Instance inst, const void *
+   switch (inst->key_length) {
+     case AES128_KEY_SIZE:
+       cmac_aes128_update(&inst->context.aes128, in_len, in);
++#if NETTLE_VERSION_MAJOR < 4
+       cmac_aes128_digest(&inst->context.aes128, out_len, out);
++#else
++      cmac_aes128_digest(&inst->context.aes128, out);
++#endif
+       break;
+     case AES256_KEY_SIZE:
+       cmac_aes256_update(&inst->context.aes256, in_len, in);
++#if NETTLE_VERSION_MAJOR < 4
+       cmac_aes256_digest(&inst->context.aes256, out_len, out);
++#else
++      cmac_aes256_digest(&inst->context.aes256, out);
++#endif
+       break;
+     default:
+       assert(0);
+--- chrony-4.8/hash_nettle.c.orig	2026-05-22 06:24:06.004518870 +0200
++++ chrony-4.8/hash_nettle.c	2026-05-22 06:24:36.031022869 +0200
+@@ -30,6 +30,7 @@
+ #include "sysincl.h"
+ 
+ #include <nettle/nettle-meta.h>
++#include <nettle/version.h>
+ 
+ #include "hash.h"
+ #include "memory.h"
+@@ -107,7 +108,11 @@ HSH_Hash(int id, const void *in1, int in
+   hash->update(context, in1_len, in1);
+   if (in2)
+     hash->update(context, in2_len, in2);
++#if NETTLE_VERSION_MAJOR < 4
+   hash->digest(context, out_len, out);
++#else
++  hash->digest(context, out);
++#endif
+ 
+   return out_len;
+ }

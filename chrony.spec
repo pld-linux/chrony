@@ -3,12 +3,12 @@
 Summary:	An NTP client/server
 Summary(pl.UTF-8):	Klient/serwer NTP
 Name:		chrony
-Version:	4.7
+Version:	4.8
 Release:	1
 License:	GPL v2
 Group:		Daemons
 Source0:	https://chrony-project.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	a1ab6e972527a9cbf6bf862679352ed3
+# Source0-md5:	0ad862b6d40b84abe145b13d9f1d8025
 Source1:	%{name}.conf
 Source2:	%{name}.keys
 Source3:	%{name}d.sysconfig
@@ -16,6 +16,7 @@ Source4:	%{name}d.init
 Source5:	%{name}.logrotate
 Patch0:		fix-seccomp-build.patch
 Patch1:		conf.d.patch
+Patch2:		%{name}-nettle4.patch
 URL:		https://chrony-project.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
@@ -65,6 +66,7 @@ Internetu, obsługuje także komputery na stałym łączu.
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1
+%patch -P2 -p1
 
 %build
 # NOTE: It is not autoconf generated configre
