@@ -19,6 +19,7 @@ Patch1:		conf.d.patch
 URL:		https://chrony-project.org/
 BuildRequires:	asciidoc
 BuildRequires:	bison
+BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gnutls-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
@@ -44,8 +45,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/ntp
 
-%define		specflags	-pie -fpie
-
 %description
 A client/server for the Network Time Protocol, this program keeps your
 computer's clock accurate. It was specially designed to support
@@ -66,7 +65,7 @@ Internetu, obsługuje także komputery na stałym łączu.
 %build
 # NOTE: It is not autoconf generated configre
 CC="%{__cc}" \
-CFLAGS="%{rpmcflags} -Wmissing-prototypes -Wall" \
+CFLAGS="%{rpmcflags} -pie -fpie -Wmissing-prototypes -Wall" \
 CPPFLAGS="%{rpmcppflags}" \
 LDFLAGS="%{rpmldflags}" \
 ./configure \
